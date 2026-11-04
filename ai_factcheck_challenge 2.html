@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 팩트체크 챌린지</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:22px 14px;background:#f2f5fa;color:#17243a;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}
+main{max-width:720px;margin:auto;background:white;border:1px solid #e2e8f0;border-radius:20px;overflow:hidden;box-shadow:0 12px 32px #1b315014}
+header{background:#172b48;color:white;padding:25px}.eyebrow{font-size:12px;color:#8ee0c1;font-weight:800;letter-spacing:.08em}
+h1{font-size:28px;margin:8px 0}header p{color:#d3deed;margin:0}.progress{display:flex;gap:6px;margin-top:20px}.bar{height:6px;flex:1;border-radius:9px;background:#53647b}.bar.active{background:#5bd0a1}
+.content{padding:24px}.step{display:none}.step.active{display:block}h2{font-size:21px;margin:0 0 8px}.muted{color:#64748b;font-size:14px;margin:0 0 20px}
+label{display:block;font-weight:700;margin:16px 0 7px}textarea,input[type=text]{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:11px;font:inherit;color:#17243a}textarea{min-height:90px;resize:vertical}
+.notice,.summary{background:#f1f5f9;border-radius:13px;padding:14px;margin:18px 0;font-size:14px;line-height:1.6}.notice strong{color:#9a6412}
+.btns{display:flex;gap:10px;margin-top:20px}button{border:0;border-radius:11px;padding:13px 18px;font:inherit;font-weight:750;cursor:pointer;background:#176b53;color:white;flex:1}button.secondary{background:#e8edf4;color:#26364d}
+.choice{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:12px 0}.choice input{margin-top:5px;accent-color:#176b53}
+.result{text-align:center;padding:15px 0}.shield{font-size:48px}.tag{display:inline-block;padding:6px 10px;border-radius:20px;background:#dcfce7;color:#166534;font-size:13px;font-weight:700}
+.summary p{margin:7px 0;white-space:pre-wrap;overflow-wrap:anywhere}.summary b{display:block;margin-top:9px}
+@media(max-width:480px){.content{padding:18px}header{padding:21px}h1{font-size:24px}.btns{flex-direction:column}}
+@media print{body{background:white;padding:0}main{box-shadow:none;border:0}header{print-color-adjust:exact;-webkit-print-color-adjust:exact}.btns{display:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+ <div class="eyebrow">AI OVERRELIANCE PREVENTION</div>
+ <h1>🛡️ AI 팩트체크 챌린지</h1>
+ <p>AI의 답변, 정말 사실일까? 직접 근거를 찾아 검증해 보세요.</p>
+ <div class="progress"><div class="bar active"></div><div class="bar"></div><div class="bar"></div></div>
+ <p id="stepLabel" style="font-size:12px;margin-top:9px">진행 단계 1/3</p>
+</header>
+<section class="content">
+ <div class="step active" id="step1">
+  <h2>1. AI 답변 입력하기</h2><p class="muted">AI에게 질문하고 받은 답변을 입력해 보세요.</p>
+  <label for="question">나의 질문</label>
+  <textarea id="question" placeholder="예: 지구에서 계절이 바뀌는 이유는 무엇일까?"></textarea>
+  <label for="answer">AI가 제공한 답변</label>
+  <textarea id="answer" placeholder="AI가 답변한 내용을 입력하세요."></textarea>
+  <div class="notice"><strong>⚠️ 주의!</strong><br>AI의 답변은 틀릴 수도 있습니다. 그대로 믿지 말고 다음 단계에서 직접 확인해 보세요.</div>
+  <div class="btns"><button id="to2">답변 검증하기 →</button></div>
+ </div>
+ <div class="step" id="step2">
+  <h2>2. AI 답변 검증하기</h2><p class="muted">교과서, 공공기관, 논문 등 신뢰할 수 있는 자료를 활용하세요.</p>
+  <div class="summary"><b>나의 질문</b><p id="showQuestion"></p><b>AI의 답변</b><p id="showAnswer"></p></div>
+  <label for="source">① 참고한 자료의 출처</label>
+  <input type="text" id="source" placeholder="예: 통합과학 교과서 45쪽, 공공기관 웹사이트">
+  <label for="evidence">② 자료에서 확인한 근거</label>
+  <textarea id="evidence" placeholder="AI의 답변과 비교하여 확인한 사실을 작성하세요."></textarea>
+  <label>③ 검증 결과</label>
+  <label class="choice"><input type="radio" name="judgement" value="사실과 일치함"> AI의 답변이 사실과 일치함</label>
+  <label class="choice"><input type="radio" name="judgement" value="수정이 필요함" checked> AI의 답변에 오류가 있어 수정이 필요함</label>
+  <label class="choice"><input type="radio" name="judgement" value="판단하기 어려움"> 자료가 부족해 판단하기 어려움</label>
+  <div class="btns"><button class="secondary" id="back1">이전 단계</button><button id="to3">검증 결과 제출하기 →</button></div>
+ </div>
+ <div class="step" id="step3">
+  <div class="result"><div class="shield">🛡️</div><h2>검증 완료!</h2><span class="tag">스스로 검증하는 습관 +1</span><p class="muted" style="margin-top:14px">AI의 답을 그대로 받아들이지 않고 자료를 통해 확인했습니다.</p></div>
+  <div class="summary" id="record"></div>
+  <div class="notice"><b>기억하세요!</b><br>AI는 정보를 얻는 도구일 뿐, 정답을 판단하는 것은 여러분의 몫입니다.</div>
+  <div class="btns"><button id="restart">새로운 문제 검증하기</button><button class="secondary" id="print">검증 기록 인쇄하기</button></div>
+ </div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function show(n){
+ document.querySelectorAll('.step').forEach((el,i)=>el.classList.toggle('active',i===n-1));
+ document.querySelectorAll('.bar').forEach((el,i)=>el.classList.toggle('active',i<n));
+ $('stepLabel').textContent=`진행 단계 ${n}/3`;
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+$('to2').onclick=()=>{
+ if(!$('question').value.trim()||!$('answer').value.trim()){alert('질문과 AI 답변을 모두 입력해 주세요.');return;}
+ $('showQuestion').textContent=$('question').value;
+ $('showAnswer').textContent=$('answer').value;show(2);
+};
+$('back1').onclick=()=>show(1);
+$('to3').onclick=()=>{
+ if(!$('source').value.trim()||!$('evidence').value.trim()){alert('자료의 출처와 확인한 근거를 작성해 주세요.');return;}
+ const judgement=document.querySelector('input[name="judgement"]:checked').value;
+ const fields=[['질문',$('question').value],['AI 답변',$('answer').value],['참고 자료',$('source').value],['확인한 근거',$('evidence').value],['검증 결과',judgement]];
+ $('record').replaceChildren();
+ fields.forEach(([name,value])=>{const b=document.createElement('b');b.textContent=name;const p=document.createElement('p');p.textContent=value;$('record').append(b,p);});
+ show(3);
+};
+$('restart').onclick=()=>{
+ ['question','answer','source','evidence'].forEach(id=>$(id).value='');
+ document.querySelector('input[name="judgement"][value="수정이 필요함"]').checked=true;show(1);
+};
+$('print').onclick=()=>window.print();
+</script>
+</body>
+</html>
